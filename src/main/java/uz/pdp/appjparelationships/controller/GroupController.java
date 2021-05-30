@@ -40,19 +40,42 @@ public class GroupController {
 
     @PostMapping
     public String addGroup(@RequestBody GroupDto groupDto) {
-
         Group group = new Group();
         group.setName(groupDto.getName());
-
         Optional<Faculty> optionalFaculty = facultyRepository.findById(groupDto.getFacultyId());
         if (!optionalFaculty.isPresent()) {
             return "Such faculty not found";
         }
+        group.setFaculty(optionalFaculty.get());
+
+        groupRepository.save(group);
+        return "Group added";
+    }
+    @PutMapping("/editGroup/{id}")
+    public String editById(@PathVariable Integer id, @RequestBody GroupDto groupDto){
+        Optional<Group> optionalGroup = groupRepository.findById(id);
+        Optional<Faculty> optionalFaculty = facultyRepository.findById(id);
+        Group group = optionalGroup.get();
+
+        if (!optionalGroup.isPresent()) return "Not found Group ID";
+        if (!optionalFaculty.isPresent()) return "Not found Faculty ID";
+
+        group.setName(groupDto.getName());
 
         group.setFaculty(optionalFaculty.get());
 
         groupRepository.save(group);
         return "Group added";
+
+    }
+    @DeleteMapping("/delete/{id}")
+    public String deleteById(@PathVariable Integer id){
+        Optional<Group> byId = groupRepository.findById(id);
+        if (byId.isPresent()){
+            groupRepository.deleteById(id);
+            return "deleted";
+        }
+        return "not found group id";
     }
 
 

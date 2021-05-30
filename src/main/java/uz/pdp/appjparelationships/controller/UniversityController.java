@@ -26,7 +26,6 @@ public class UniversityController {
         return universityList;
     }
 
-
     //CREATE
     @RequestMapping(value = "/university", method = RequestMethod.POST)
     public String addUniversity(@RequestBody UniversityDto universityDto) {
@@ -46,7 +45,6 @@ public class UniversityController {
 
         return "University added";
     }
-
     //UPDATE
     @RequestMapping(value = "/university/{id}", method = RequestMethod.PUT)
     public String editUniversity(@PathVariable Integer id, @RequestBody UniversityDto universityDto) {

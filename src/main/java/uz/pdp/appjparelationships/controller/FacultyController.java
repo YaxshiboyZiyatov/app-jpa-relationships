@@ -42,6 +42,7 @@ public class FacultyController {
         faculty.setUniversity(optionalUniversity.get());
         facultyRepository.save(faculty);
         return "Faculty saved";
+
     }
 
 

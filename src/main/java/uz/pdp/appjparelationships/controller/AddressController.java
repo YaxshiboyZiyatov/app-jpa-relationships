@@ -8,7 +8,7 @@ import uz.pdp.appjparelationships.repository.AddressRepository;
 
 import java.util.List;
 import java.util.Optional;
-
+  
 @RestController
 @RequestMapping("/address")
 public class AddressController {

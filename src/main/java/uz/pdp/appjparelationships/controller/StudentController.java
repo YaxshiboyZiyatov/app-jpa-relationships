@@ -107,6 +107,7 @@ public class StudentController {
         address.setCity(studentDTO.getCity());
         address.setDistrict(studentDTO.getDistrict());
         address.setStreet(studentDTO.getStreet());
+        Address savedAddress = addressRepository.save(address);
 
         Student student = new Student();
         student.setFirstName(studentDTO.getFirstName());
@@ -117,7 +118,7 @@ public class StudentController {
             return "Not found group Id";
         }
         student.setGroup(byId.get());
-        student.setAddress(address);
+        student.setAddress(savedAddress);
         student.setSubjects(subjectList);
         studentRepository.save(student);
         return "saved";
@@ -136,12 +137,14 @@ public class StudentController {
             if (exists) {
                 return "This group such student exists";
             }
-            Address address = new Address();
+            Student student = optionalStudent.get();
+
+            Address address = student.getAddress();
             address.setCity(studentDTO.getCity());
             address.setDistrict(studentDTO.getDistrict());
             address.setStreet(studentDTO.getStreet());
+            Address savedAddress = addressRepository.save(address);
 
-            Student student = optionalStudent.get();
             student.setFirstName(studentDTO.getFirstName());
             student.setLastName(studentDTO.getLastName());
 
@@ -152,7 +155,7 @@ public class StudentController {
                 subjectList.add(subject);
             }
 
-            student.setAddress(address);
+            student.setAddress(savedAddress);
             student.setSubjects(subjectList);
             studentRepository.save(student);
             return "saved";
@@ -163,11 +166,10 @@ public class StudentController {
     @DeleteMapping("/deleteStudent/{id}")
     public String deleteById(@PathVariable Integer id){
 
-        Optional<Student> byId = studentRepository.findById(id);
-        if (byId.isPresent()){
-            studentRepository.deleteById(id);
-            return "deleted";
-        }
-        return "Not found Student Id";
+        if (!addressRepository.existsById(id))
+            return "Not";
+
+        studentRepository.deleteById(id);
+        return "deleted";
     }
 }
